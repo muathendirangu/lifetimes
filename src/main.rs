@@ -1,21 +1,36 @@
+use std::collections::HashMap;
+
 struct Person<'a>{
-    name:String,
-    location:&'a String,
+    name: &'a str,
+    location: &'a str,
 }
 
+fn get_city<'a,'b>(code: &'a str, airport_codes: &'b HashMap<&str, &str>) -> &'b str {
+    airport_codes
+        .get(code)
+        .expect("We don't know this location!")
+}
 fn main() {
-    let tz = String::from("Tanzania");
+
     let me = Person{
-        name:String::from("Charles"),
-        location:&tz,
-    };
-
-    let brad = Person{
-        name:String::from("Bradley"),
-        location:&tz,
+        name: "Charles",
+        location:"JKIA",
     };
 
 
-    println!("Hello, {} from {}",me.name,me.location);
-    println!("Hello mr {}, how is {}",brad.name, brad.location)
+
+
+    let airport_codes = HashMap::from([
+        ("DAR", "Dar-Esalaam"),
+        ("JKIA", "Nairobi"),
+        ("MOM", "Mumbai"),
+    ]);
+
+
+    println!(
+        "Welcome, {} from {}!",
+        me.name,
+        get_city(&me.location, &airport_codes)
+    );
+
 }
